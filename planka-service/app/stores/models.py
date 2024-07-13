@@ -1,21 +1,42 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
-from app.stores.database import Base
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Boolean, func, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 
-class BoardModel(Base):
+Base = declarative_base()
+metadata = Base.metadata
+
+
+class Project(Base):
+    __tablename__ = 'projects'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    project_id = Column(String, unique=True, nullable=False)
+    name = Column(String)
+    updated_at = Column(DateTime, server_default=func.now(),
+                        onupdate=func.now())
+    read = Column(Boolean, default=False)
+
+
+class Board(Base):
     __tablename__ = 'boards'
-    id = Column(Integer, primary_key=True, index=True)
-    planka_id = Column(Integer, unique=True, index=True)
-    name = Column(String, index=True)
-    last_update = Column(DateTime)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    board_id = Column(String, unique=True, nullable=False)
+    project_id = Column(ForeignKey('projects.id'), nullable=False)
+    name = Column(String)
+    updated_at = Column(DateTime, server_default=func.now(),
+                        onupdate=func.now())
+    read = Column(Boolean, default=False)
 
-    updates = relationship("Update", back_populates="board")
 
-class Update(Base):
-    __tablename__ = 'updates'
-    id = Column(Integer, primary_key=True, index=True)
-    board_id = Column(Integer, ForeignKey('boards.id'))
-    timestamp = Column(DateTime)
-    description = Column(String)
-
-    board = relationship("Board", back_populates="updates")
+class Card(Base):
+    __tablename__ = 'cards'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    card_id = Column(String, unique=True, nullable=False)
+    board_id = Column(ForeignKey('boards.id'), nullable=False)
+    project_id = Column(ForeignKey('projects.id'), nullable=False)
+    name = Column(String)
+    description = Column(Text)
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, server_default=func.now(),
+                        onupdate=func.now())
+    read = Column(Boolean, default=False)

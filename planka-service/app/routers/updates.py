@@ -6,6 +6,8 @@ from app.stores.database import SessionLocal
 router = APIRouter()
 
 # Dependency to get DB session
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -13,17 +15,20 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/boards/", response_model=list[schemas.Board])
+
+@router.get("/boards/", response_model=list[schemas.BoardOut])
 def read_boards(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     boards = db.query(models.Board).offset(skip).limit(limit).all()
     return boards
 
-@router.get("/boards/{board_id}", response_model=schemas.Board)
+
+@router.get("/boards/{board_id}", response_model=schemas.BoardOut)
 def read_board(board_id: int, db: Session = Depends(get_db)):
     board = db.query(models.Board).filter(models.Board.id == board_id).first()
     if board is None:
         raise HTTPException(status_code=404, detail="Board not found")
     return board
+
 
 @router.get("/boards/{board_id}/updates")
 def read_board_updates(board_id: int, db: Session = Depends(get_db)):

@@ -7,7 +7,6 @@ services:
     ports:
       - "8000:80"
     environment:
-      - ENV=development
       - PLANKA_URL=${PLANKA_URL}
       - PLANKA_EMAIL=${PLANKA_EMAIL}
       - PLANKA_PASSWORD=${PLANKA_PASSWORD}
@@ -17,11 +16,11 @@ services:
       - db
 
   db:
-    image: postgres:14
+    image: postgres:14-alpine
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

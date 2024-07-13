@@ -1,41 +1,30 @@
 import requests
 import asyncio
+from pprint import pprint
 from datetime import datetime
 from sqlalchemy.orm import Session
-from app.dependencies import PLANKA_URL, EMAIL, PASSWORD, UPDATE_INTERVAL
 from app.stores.database import SessionLocal
-from app.stores.models import BoardModel, Update as UpdateModel
-from app.internal.plankapy import *
+from app.internal.api import PlankaAPIClient
 
 
+# async def get_auth_token():
+#     planka = Planka(PLANKA_URL, EMAIL, PASSWORD)
+#     return planka.auth
+# response = requests.post(f"{PLANKA_URL}/users/signin", json={"email": EMAIL, "password": PASSWORD})
+# response.raise_for_status()
+# return response.json()["token"]
 
-def init_planka():
-    planka = Planka(PLANKA_URL, EMAIL, PASSWORD)
-    board = Board(planka)
-    print("ASDASDASDDS")
-    print("Auth ", planka.auth, flush=True)
 
+async def collect_updates(planka: PlankaAPIClient):
+    pass
 
-async def get_auth_token():
-    planka = Planka(PLANKA_URL, EMAIL, PASSWORD)
-    return planka.auth
-    # response = requests.post(f"{PLANKA_URL}/users/signin", json={"email": EMAIL, "password": PASSWORD})
-    # response.raise_for_status()
-    # return response.json()["token"]
-
-async def collect_updates():
-    token = await get_auth_token()
-    headers = \
-            { 
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {token}"
-            }
+    # token = await get_auth_token()
 
     # Get boards
-    response = requests.get(f"{PLANKA_URL}/api/boards", headers=headers)
-    print(token)
-    print("RESP RESP ", response.status_code, flush=True)
-    print(response.text, flush=True)
+    # response = requests.get(f"{PLANKA_URL}/api/boards", headers=headers)
+    # print(token)
+    # print("RESP RESP ", response.status_code, flush=True)
+    # print(response.text, flush=True)
     # response.raise_for_status()
     # boards = response.json()
 
@@ -80,7 +69,24 @@ async def collect_updates():
 
     # db.close()
 
-async def start_periodic_update():
+
+# async def collect_projects(planka: PlankaAPIClient):
+#     projects = await planka.get_projects()
+#     for project in projects:
+#         db_project = await db.execute(select(Project).filter_by(project_id=project['id']))
+#         db_project = db_project.scalar_one_or_none()
+#         if db_project is None:
+#             new_project = Project(
+#                 project_id=project['id'], name=project['name'])
+#             db.add(new_project)
+#         else:
+#             db_project.name = project['name']
+#             db_project.updated_at = datetime.utcnow()
+#             db_project.read = False
+#     await db.commit()
+
+
+async def start_periodic_update(planka: PlankaAPIClient):
     while True:
-        await collect_updates()
+        await collect_updates(planka)
         await asyncio.sleep(100000)

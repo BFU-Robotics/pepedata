@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 80
 
 # Run the application
-CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["sh", "-c", "poetry run alembic upgrade head && poetry run uvicorn app.main:app --host 0.0.0.0 --port 80"]

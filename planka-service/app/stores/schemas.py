@@ -1,33 +1,67 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+from datetime import datetime
+from pydantic import BaseModel
+from typing import Optional
+
+
+# Project Models
+class ProjectBase(BaseModel):
+    project_id: str
+    name: Optional[str] = None
+    read: Optional[bool] = False
+
+
+class ProjectIn(ProjectBase):
+    pass
+
+
+class ProjectOut(ProjectBase):
+    id: int
+    updated_at: datetime
+
+    class Config:
+        orm_mode: True
+
+
+# Board Models
 class BoardBase(BaseModel):
-    planka_id: int
-    name: str
+    board_id: str
+    project_id: Optional[str] = None
+    name: Optional[str] = None
+    read: Optional[bool] = False
 
-class BoardCreate(BoardBase):
+
+class BoardIn(BoardBase):
     pass
 
-class BoardUpdate(BaseModel):
-    last_update: datetime
 
-class Board(BoardBase):
+class BoardOut(BoardBase):
     id: int
-    last_update: datetime
+    updated_at: datetime
 
     class Config:
-        orm_mode = True
+        orm_mode: True
 
-class UpdateBase(BaseModel):
-    board_id: int
-    timestamp: datetime
-    description: str
 
-class UpdateCreate(UpdateBase):
+# Card Models
+class CardBase(BaseModel):
+    card_id: str
+    board_id: Optional[str] = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    read: Optional[bool] = False
+
+
+class CardIn(CardBase):
     pass
 
-class Update(UpdateBase):
+
+class CardOut(CardBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
-        orm_mode = True
+        orm_mode: True
