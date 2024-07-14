@@ -81,4 +81,7 @@ async def start_periodic_update(planka: PlankaAPIClient):
         await collect_projects(planka, db)
         await collect_boards(planka, db)
         await collect_cards(planka, db)
+
+        db.close()
+
         await asyncio.sleep(60)
