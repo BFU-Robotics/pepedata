@@ -1,4 +1,3 @@
-
 import requests
 import json
 
@@ -56,9 +55,15 @@ class PlankaAPIClient:
 
         return request.json()['included']['boards']
 
-    def get_cards(self, board_id: str):
-        # Implement the actual API call to get cards
-        pass
+    def get_cards(self):
+        boards = self.get_boards()
+        cards = []
+        for board in boards:
+            request = requests.get(
+                f"{self.url}/api/boards/{board['id']}/", headers=self.get_headers())
+            cards.extend(request.json()['included']['cards'])
+
+        return cards
 
 
 class InvalidToken(Exception):

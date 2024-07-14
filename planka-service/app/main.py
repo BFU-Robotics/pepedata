@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from app.routers import updates
 import asyncio
 from app.internal.api import PlankaAPIClient
-from app.dependencies import PLANKA_URL, EMAIL, PASSWORD, UPDATE_INTERVAL
+from app.config import PLANKA_URL, EMAIL, PASSWORD
 
 app = FastAPI()
 

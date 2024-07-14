@@ -1,9 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Boolean, func, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, func, ForeignKey
 from datetime import datetime
 
-Base = declarative_base()
+from app.stores.database import Base
+
 metadata = Base.metadata
 
 

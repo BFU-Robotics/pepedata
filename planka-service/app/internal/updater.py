@@ -16,7 +16,8 @@ from app.internal.api import PlankaAPIClient
 
 
 async def collect_updates(planka: PlankaAPIClient):
-    pass
+    # pass
+    print(planka.get_cards(), flush=True)
 
     # token = await get_auth_token()
 

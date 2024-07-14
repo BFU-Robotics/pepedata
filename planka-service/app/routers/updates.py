@@ -1,19 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.stores import models, schemas
-from app.stores.database import SessionLocal
+from app.dependencies import get_db
 
 router = APIRouter()
-
-# Dependency to get DB session
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.get("/boards/", response_model=list[schemas.BoardOut])
