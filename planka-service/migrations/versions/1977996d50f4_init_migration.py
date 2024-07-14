@@ -1,8 +1,8 @@
 """Init migration
 
-Revision ID: f575bfee84a9
+Revision ID: 1977996d50f4
 Revises: 
-Create Date: 2024-07-13 22:21:06.300684
+Create Date: 2024-07-14 17:21:38.526993
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f575bfee84a9'
+revision: str = '1977996d50f4'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -32,26 +32,26 @@ def upgrade() -> None:
     op.create_table('boards',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('board_id', sa.String(), nullable=False),
-    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('project_id', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('read', sa.Boolean(), nullable=True),
-    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.ForeignKeyConstraint(['project_id'], ['projects.project_id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('board_id')
     )
     op.create_table('cards',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('card_id', sa.String(), nullable=False),
-    sa.Column('board_id', sa.Integer(), nullable=False),
-    sa.Column('project_id', sa.Integer(), nullable=False),
+    sa.Column('board_id', sa.String(), nullable=False),
+    sa.Column('project_id', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('read', sa.Boolean(), nullable=True),
-    sa.ForeignKeyConstraint(['board_id'], ['boards.id'], ),
-    sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.ForeignKeyConstraint(['board_id'], ['boards.board_id'], ),
+    sa.ForeignKeyConstraint(['project_id'], ['projects.project_id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('card_id')
     )
