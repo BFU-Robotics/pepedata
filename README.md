@@ -8,3 +8,9 @@ Pepedata collects updates from organization services (Planka, Wiki, Github)
 ## Start up
 1. Fill .env (check .env-template)
 2. ```docker-compose up --build```
+
+## Todo
+
+- [x] implement planka-service
+- [ ] implement tests for planka-service
+- [ ] implement checking for removed entities (projects, boards, cards)

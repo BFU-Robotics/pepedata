@@ -71,6 +71,7 @@ async def collect_cards(planka: PlankaAPIClient, db: Session):
 
         elif db_card.stage != card_stage:
             db_card.stage = card_stage
+            db_card.read = False
 
     db.commit()
 
