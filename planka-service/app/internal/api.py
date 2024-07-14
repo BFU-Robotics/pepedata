@@ -65,6 +65,20 @@ class PlankaAPIClient:
 
         return cards
 
+    def get_stage_name_by_id(self, stage_id, board_id):
+        board_req = requests.get(
+            f"{self.url}/api/boards/{board_id}", headers=self.get_headers())
+        stages = board_req.json()['included']['lists']
+        for stage in stages:
+            if stage['id'] == stage_id:
+                return stage['name']
+
+    def get_project_by_board(self, board_id):
+        board_req = requests.get(
+            f"{self.url}/api/boards/{board_id}", headers=self.get_headers())
+
+        return board_req.json()['item']['projectId']
+
 
 class InvalidToken(Exception):
     """General Error for invalid API inputs

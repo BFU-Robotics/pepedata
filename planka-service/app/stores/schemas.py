@@ -60,6 +60,7 @@ class CardIn(CardBase):
 
 class CardOut(CardBase):
     id: int
+    stage: str
     created_at: datetime
     updated_at: datetime
 

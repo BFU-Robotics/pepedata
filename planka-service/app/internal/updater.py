@@ -43,9 +43,42 @@ async def collect_boards(planka: PlankaAPIClient, db: Session):
     db.commit()
 
 
+async def collect_cards(planka: PlankaAPIClient, db: Session):
+    cards = planka.get_cards()
+    for card in cards:
+        db_card = db.query(models.Card).filter_by(
+            card_id=card['id']
+        )
+
+        db_card = db_card.scalar()
+        card_stage = planka.get_stage_name_by_id(
+            card['listId'], card['boardId']
+        )
+
+        project_id = planka.get_project_by_board(card['boardId'])
+
+        if db_card is None:
+            new_card = models.Card(
+                card_id=card['id'],
+                board_id=card["boardId"],
+                project_id=project_id,
+                name=card['name'],
+                description=card['description'],
+                stage=card_stage
+            )
+
+            db.add(new_card)
+
+        elif db_card.stage != card_stage:
+            db_card.stage = card_stage
+
+    db.commit()
+
+
 async def start_periodic_update(planka: PlankaAPIClient):
     while True:
         db = SessionLocal()
         await collect_projects(planka, db)
         await collect_boards(planka, db)
+        await collect_cards(planka, db)
         await asyncio.sleep(60)

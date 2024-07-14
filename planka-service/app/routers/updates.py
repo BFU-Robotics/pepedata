@@ -17,3 +17,10 @@ def get_projects(db: Session = Depends(get_db)):
     projects = db.query(models.Project).all()
 
     return projects
+
+
+@router.get("/cards/", response_model=list[schemas.CardOut])
+def get_cards(db: Session = Depends(get_db)):
+    cards = db.query(models.Card).all()
+
+    return cards

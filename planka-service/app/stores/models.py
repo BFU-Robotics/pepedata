@@ -38,4 +38,5 @@ class Card(Base):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, server_default=func.now(),
                         onupdate=func.now())
+    stage = Column(String, nullable=False)
     read = Column(Boolean, default=False)
